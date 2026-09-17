@@ -5,6 +5,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  PYTHONUTF8: '1'
+  PYTHONIOENCODING: utf-8
 jobs:
   build:
     runs-on: windows-latest
@@ -21,7 +24,7 @@ jobs:
           architecture: x64
       - name: Prepare video tools
         run: |
-          python setup_tools.py
+          python -c "from setup_tools import install_tools; from splitter import Runner, tools_dir; install_tools(tools_dir(), Runner())"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Test splitting engine on Windows
         run: |
